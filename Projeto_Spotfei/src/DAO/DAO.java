@@ -3,12 +3,17 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package DAO;
+import javax.swing.*;
+import java.util.ArrayList;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import model.Usuario;
 import model.Playlist;
+import model.Musica;
+import model.Artista;
 /**
  *
  * @author unifmkuniyoshi
@@ -54,10 +59,41 @@ public class DAO {
     
     public void inserirPlaylist(Playlist play) throws SQLException{
         String sql = "insert into playlist (nome, usuario) values ('"
-                      + play.getNome()    + "', '"
+                      + play.getPlayNome() + "', '"
                       + play.getUser().getUsuario()   + "')";
         PreparedStatement statement = conn.prepareStatement(sql);
         statement.execute();
         conn.close();
+    }
+    
+    public ArrayList<String> musicaToString(JTextField t) throws SQLException {
+    String sql = "SELECT nome FROM musica WHERE nome = ? OR genero = ? "
+            + "OR artista = ?";
+    ArrayList<String> musicas = new ArrayList<>();
+
+    try (PreparedStatement statement = conn.prepareStatement(sql)) {
+        statement.setString(1, t.getText());
+        statement.setString(2, t.getText());
+        statement.setString(3, t.getText());
+
+        try (ResultSet resultado = statement.executeQuery()) {
+            ResultSetMetaData metaData = resultado.getMetaData();
+            int Cont = metaData.getColumnCount();
+
+            while (resultado.next()) {
+                StringBuilder linha = new StringBuilder();
+                for (int i = 1; i <= Cont; i++) {
+                    String valor = resultado.getString(i); 
+                    linha.append(valor);
+                    if (i < Cont) {
+                        linha.append(", ");
+                        }
+                    }
+                    musicas.add(linha.toString());
+                }
+            }
+        }
+
+        return musicas;
     }
 }

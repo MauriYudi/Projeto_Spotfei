@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import control.ControllerLogin;
+import control.ControllerUser;
 
 /**
  *

@@ -19,8 +19,6 @@ import view.Playlists_Criar;
 public class ControllerPlaylists {
     private Playlists_Criar view;
     
-    ControllerLogin con = new ControllerLogin(null);
-    
     Usuario u = UsuarioLogin.getUl().getUser();
 
     public ControllerPlaylists(Playlists_Criar view) {

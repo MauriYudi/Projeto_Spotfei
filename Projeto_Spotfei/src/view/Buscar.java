@@ -4,6 +4,13 @@
  */
 package view;
 
+import control.ControllerMusica;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+
 /**
  *
  * @author unifmkuniyoshi
@@ -15,7 +22,66 @@ public class Buscar extends javax.swing.JFrame {
      */
     public Buscar() {
         initComponents();
+        c = new ControllerMusica(this);
     }
+
+    public JButton getBtn_buscarA() {
+        return btn_buscar;
+    }
+
+    public void setBtn_buscarA(JButton btn_buscarA) {
+        this.btn_buscar = btn_buscarA;
+    }
+
+    public JButton getBtn_voltar() {
+        return btn_voltar;
+    }
+
+    public void setBtn_voltar(JButton btn_voltar) {
+        this.btn_voltar = btn_voltar;
+    }
+
+    public JLabel getLbl_buscar() {
+        return lbl_buscar;
+    }
+
+    public void setLbl_buscar(JLabel lbl_buscar) {
+        this.lbl_buscar = lbl_buscar;
+    }
+
+    public JList<String> getLista_musicas() {
+        return lista_musicas;
+    }
+
+    public void setLista_musicas(JList<String> lista_musicas) {
+        this.lista_musicas = lista_musicas;
+    }
+
+    public JScrollPane getPainel_musicas() {
+        return painel_musicas;
+    }
+
+    public void setPainel_musicas(JScrollPane painel_musicas) {
+        this.painel_musicas = painel_musicas;
+    }
+
+    public JTextField getTxt_buscarA() {
+        return txt_buscar;
+    }
+
+    public void setTxt_buscarA(JTextField txt_buscarA) {
+        this.txt_buscar = txt_buscarA;
+    }
+
+    public JLabel getLbl_info() {
+        return lbl_info;
+    }
+
+    public void setLbl_info(JLabel lbl_info) {
+        this.lbl_info = lbl_info;
+    }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -27,11 +93,12 @@ public class Buscar extends javax.swing.JFrame {
     private void initComponents() {
 
         lbl_buscar = new javax.swing.JLabel();
-        txt_buscar = new javax.swing.JTextField();
-        btn_buscar = new javax.swing.JButton();
         btn_voltar = new javax.swing.JButton();
         painel_musicas = new javax.swing.JScrollPane();
         lista_musicas = new javax.swing.JList<>();
+        txt_buscar = new javax.swing.JTextField();
+        btn_buscar = new javax.swing.JButton();
+        lbl_info = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -39,8 +106,41 @@ public class Buscar extends javax.swing.JFrame {
         lbl_buscar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbl_buscar.setText("Buscar Música");
 
+        btn_voltar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btn_voltar.setText("Voltar");
+        btn_voltar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_voltarActionPerformed(evt);
+            }
+        });
+
+        lista_musicas.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        lista_musicas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lista_musicasMouseClicked(evt);
+            }
+        });
+        lista_musicas.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                lista_musicasPropertyChange(evt);
+            }
+        });
+        painel_musicas.setViewportView(lista_musicas);
+
         txt_buscar.setForeground(new java.awt.Color(102, 102, 102));
         txt_buscar.setText("Nome da música, artista ou gênero.");
+        txt_buscar.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txt_buscarFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txt_buscarFocusLost(evt);
+            }
+        });
         txt_buscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_buscarActionPerformed(evt);
@@ -49,16 +149,15 @@ public class Buscar extends javax.swing.JFrame {
 
         btn_buscar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btn_buscar.setText("Buscar");
-
-        btn_voltar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btn_voltar.setText("Voltar");
-
-        lista_musicas.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
+        btn_buscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_buscarActionPerformed(evt);
+            }
         });
-        painel_musicas.setViewportView(lista_musicas);
+
+        lbl_info.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lbl_info.setForeground(new java.awt.Color(102, 102, 102));
+        lbl_info.setText("Clique duas vezes na música para mais opções.");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -67,16 +166,19 @@ public class Buscar extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lbl_buscar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(lbl_buscar, javax.swing.GroupLayout.DEFAULT_SIZE, 488, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btn_voltar)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(lbl_info, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(painel_musicas)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(txt_buscar, javax.swing.GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(txt_buscar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btn_buscar)))
                         .addGap(14, 14, 14)))
                 .addContainerGap())
@@ -88,13 +190,15 @@ public class Buscar extends javax.swing.JFrame {
                 .addComponent(btn_voltar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lbl_buscar)
-                .addGap(24, 24, 24)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txt_buscar)
-                    .addComponent(btn_buscar, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE))
+                .addGap(34, 34, 34)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txt_buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(painel_musicas, javax.swing.GroupLayout.DEFAULT_SIZE, 322, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(painel_musicas, javax.swing.GroupLayout.PREFERRED_SIZE, 396, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbl_info)
+                .addGap(21, 21, 21))
         );
 
         pack();
@@ -103,6 +207,40 @@ public class Buscar extends javax.swing.JFrame {
     private void txt_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_buscarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_buscarActionPerformed
+
+    private void btn_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_buscarActionPerformed
+        // TODO add your handling code here:
+        c.buscarMusica();
+    }//GEN-LAST:event_btn_buscarActionPerformed
+
+    private void btn_voltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_voltarActionPerformed
+        // TODO add your handling code here:
+        Pagina_Usuario p = new Pagina_Usuario();
+        p.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btn_voltarActionPerformed
+
+    private void lista_musicasPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_lista_musicasPropertyChange
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lista_musicasPropertyChange
+
+    private void txt_buscarFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_buscarFocusGained
+        // TODO add your handling code here:
+        c.apagaTexto(txt_buscar, "Nome da música, artista ou gênero.");
+    }//GEN-LAST:event_txt_buscarFocusGained
+
+    private void txt_buscarFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_buscarFocusLost
+        // TODO add your handling code here:
+        c.geraTexto(txt_buscar, "Nome da música, artista ou gênero.");
+    }//GEN-LAST:event_txt_buscarFocusLost
+
+    private void lista_musicasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lista_musicasMouseClicked
+        // TODO add your handling code here:
+        lbl_info.setVisible(true);
+        Musica_Info m = new Musica_Info();
+        if(evt.getClickCount() == 2)
+            m.setVisible(true);
+    }//GEN-LAST:event_lista_musicasMouseClicked
 
     /**
      * @param args the command line arguments
@@ -138,11 +276,12 @@ public class Buscar extends javax.swing.JFrame {
 //            }
 //        });
 //    }
-
+    private ControllerMusica c;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_buscar;
     private javax.swing.JButton btn_voltar;
     private javax.swing.JLabel lbl_buscar;
+    private javax.swing.JLabel lbl_info;
     private javax.swing.JList<String> lista_musicas;
     private javax.swing.JScrollPane painel_musicas;
     private javax.swing.JTextField txt_buscar;

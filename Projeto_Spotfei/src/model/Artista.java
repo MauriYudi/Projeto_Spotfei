@@ -13,5 +13,13 @@ public class Artista extends Pessoa {
     public Artista(String nome) {
         super(nome);
     }
+
+    public String getArtistaNome() {
+        return nome;
+    }
+
+    public void setArtistaNome(String nome) {
+        this.nome = nome;
+    }
     
 }

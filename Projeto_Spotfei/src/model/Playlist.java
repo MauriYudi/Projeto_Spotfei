@@ -20,11 +20,11 @@ public class Playlist {
     
     
 
-    public String getNome() {
+    public String getPlayNome() {
         return nome;
     }
 
-    public void setNome(String nome) {
+    public void setPlayNome(String nome) {
         this.nome = nome;
     }
 

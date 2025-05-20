@@ -39,6 +39,7 @@ public class ControllerLogin {
                     "Login efetuado!", "Aviso",
                     JOptionPane.INFORMATION_MESSAGE);
                 Pagina_Usuario p = new Pagina_Usuario();
+                p.getLbl_user().setText(view.getTxt_user_login().getText());
                 p.setVisible(true);
                 view.setVisible(false);
             } else{

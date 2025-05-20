@@ -9,6 +9,8 @@ import javax.swing.JLabel;
 import control.ControllerLogin;
 import DAO.DAO;
 import java.sql.ResultSet;
+import javax.swing.DefaultListModel;
+import control.ControllerUser;
 
 /**
  *
@@ -22,8 +24,6 @@ public class Pagina_Usuario extends javax.swing.JFrame {
     public Pagina_Usuario() {
         initComponents();
     }
-    
-    ControllerLogin c = new ControllerLogin(null);
 
     public JButton getBtn_history() {
         return btn_history;
@@ -97,7 +97,6 @@ public class Pagina_Usuario extends javax.swing.JFrame {
         btn_musicas = new javax.swing.JButton();
         btn_history = new javax.swing.JButton();
         btn_sair = new javax.swing.JButton();
-        btn_fechar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -145,14 +144,6 @@ public class Pagina_Usuario extends javax.swing.JFrame {
             }
         });
 
-        btn_fechar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btn_fechar.setText("FECHAR");
-        btn_fechar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_fecharActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -161,15 +152,18 @@ public class Pagina_Usuario extends javax.swing.JFrame {
                 .addGap(141, 141, 141)
                 .addComponent(btn_playlists)
                 .addContainerGap(141, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btn_sair, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lbl_bem_vindo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(lbl_user, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(lbl_spotfei, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGap(149, 149, 149)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -177,11 +171,7 @@ public class Pagina_Usuario extends javax.swing.JFrame {
                                 .addComponent(btn_history, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(btn_musicas, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btn_sair))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btn_fechar)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -197,17 +187,11 @@ public class Pagina_Usuario extends javax.swing.JFrame {
                 .addComponent(btn_playlists, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btn_musicas, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(btn_history, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(60, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btn_sair)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btn_fechar)
-                        .addContainerGap())))
+                .addGap(18, 18, 18)
+                .addComponent(btn_history, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btn_sair, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -223,6 +207,11 @@ public class Pagina_Usuario extends javax.swing.JFrame {
     private void btn_musicasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_musicasActionPerformed
         // TODO add your handling code here:
         Buscar b = new Buscar();
+        DefaultListModel<String> model = new DefaultListModel<>();
+        model.removeAllElements();
+        b.getLista_musicas().setModel(model);
+        b.getLista_musicas().setFixedCellHeight(30);
+        b.getLbl_info().setVisible(false);
         b.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btn_musicasActionPerformed
@@ -240,10 +229,6 @@ public class Pagina_Usuario extends javax.swing.JFrame {
         l.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btn_sairActionPerformed
-
-    private void btn_fecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_fecharActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btn_fecharActionPerformed
 
     /**
      * @param args the command line arguments
@@ -279,8 +264,8 @@ public class Pagina_Usuario extends javax.swing.JFrame {
 //            }
 //        });
 //    }
+    private ControllerUser c;
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btn_fechar;
     private javax.swing.JButton btn_history;
     private javax.swing.JButton btn_musicas;
     private javax.swing.JButton btn_playlists;
